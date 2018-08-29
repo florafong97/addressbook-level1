@@ -5,7 +5,7 @@ package seedu.addressbook;
  * Yes, it is possible to write non-OO code using an OO language.
  * ====================================================================
  */
-//hello world
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -21,6 +21,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.Set;
+
 
 /*
  * NOTE : =============================================================
@@ -106,7 +107,7 @@ public class AddressBook {
 
     private static final String COMMAND_FIND_WORD = "find";
     private static final String COMMAND_FIND_DESC = "Finds all persons whose names contain any of the specified "
-                                        + "keywords (case-sensitive) and displays them as a list with index numbers.";
+                                        + "keywords (not case-sensitive) and displays them as a list with index numbers.";
     private static final String COMMAND_FIND_PARAMETERS = "KEYWORD [MORE_KEYWORDS]";
     private static final String COMMAND_FIND_EXAMPLE = COMMAND_FIND_WORD + " alice bob charlie";
 
@@ -483,9 +484,13 @@ public class AddressBook {
      */
     private static ArrayList<String[]> getPersonsWithNameContainingAnyKeyword(Collection<String> keywords) {
         final ArrayList<String[]> matchedPersons = new ArrayList<>();
+        ArrayList<String> upperKeywords = new ArrayList<>();
+        for (String names: keywords) {
+            upperKeywords.add(names.toUpperCase());
+        }
         for (String[] person : getAllPersonsInAddressBook()) {
-            final Set<String> wordsInName = new HashSet<>(splitByWhitespace(getNameFromPerson(person)));
-            if (!Collections.disjoint(wordsInName, keywords)) {
+            final Set<String> wordsInName = new HashSet<>((splitByWhitespace(getNameFromPerson(person).toUpperCase())));
+            if (!Collections.disjoint(wordsInName, upperKeywords)) {
                 matchedPersons.add(person);
             }
         }
